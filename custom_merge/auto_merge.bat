@@ -3,7 +3,11 @@ chcp 65001
 title 盘灵无界自定义配置文件自动合并
 echo.
 echo 盘灵无界自定义配置文件自动合并
+
+:: 确保工作目录为脚本所在目录
 set PCUBLD="%cd%"
+cd /d "%~dp0"
+
 :: jq程序来自：https://github.com/jqlang/jq
 :: yq程序来自：https://github.com/mikefarah/yq
 
@@ -16,8 +20,6 @@ echo | set /p d=使用部署包自带的 jq:
 
 echo | set /p d=使用部署包自带的 yq: 
 %PCUBYQPATH% --version || goto end
-
-cd /d "%~dp0"
 
 set PCUBPATH=plugins\Geyser-Spigot\locales\overrides\zh_cn.json
 if exist %PCUBPATH% (
