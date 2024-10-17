@@ -1,4 +1,4 @@
-# 盘灵无界自定义配置文件自动合并
+# 盘灵无界配置文件自动合并
 
 ## 简介
 
@@ -6,13 +6,19 @@
 
 为了方便用户操作，本互通方案在 `jq` 和 `yq` 的基础上设计了自动合并脚本，可以在原有 Geyser 自定义本地化文本及头颅信息以及菜单插件 CrossPlatForms 的配置文件的基础上叠加修改。
 
-您只需要将配置文件**修改过的部分**单独保存，按照下方结构表存放到对应位置，然后执行脚本即可完成配置文件的修改合并：
+您只需要将配置文件**修改过的部分**单独保存，按照下方结构表存放到对应位置，然后执行脚本即可完成配置文件的修改合并 ：
 
+(`.bat` 后缀为 Windows 专用脚本，`.sh` 后缀为 Linux/OSX Bash 通用脚本)
 ```
 PanGuContinentUnbounded-server (服务端根目录，名称不限)
-	├─custom_merge (名称不限，但为了规范建议以“_merge”结尾)
-	│  │  auto_merge.bat	(Windows 专用脚本)
-	│  │  auto_merge.sh		(Linux/OSX Bash 通用脚本)
+	│  auto_merge_all.bat	(一键合并脚本)
+	│  auto_merge_all.sh	(同上)
+	│  start.bat	(服务端启动脚本)
+	│  start.sh		(同上)
+	│
+	├─custom_merge (集成到选装组件包中，名称不限，必须以“_merge”结尾)
+	│  │  auto_merge.bat	(半自动合并脚本)
+	│  │  auto_merge.sh		(同上)
 	│  │
 	│  └─plugins (只有这些文件可以合并，不存在的文件会直接跳过)
 	│      ├─CrossplatForms
@@ -27,16 +33,32 @@ PanGuContinentUnbounded-server (服务端根目录，名称不限)
 	│                      zh_cn.json	(中文简体)
 	│                      zh_tw.json	(中文台繁)
 	│
-	└─tools	(合并文件基础程序，服务端部署包已集成)
-			jq					(Linux 版本 JSON 合并，x86 平台)
-			jq-linux-arm64		(Linux 版本 JSON 合并，arm64 平台)
-			jq-windows-i386.exe	(Windows 版本 JSON 合并，x86 平台)
-			yq					(Linux 版本 YAML 合并，x86 平台)
-			yq_linux_arm64		(Linux 版本 YAML 合并，arm64 平台)
-			yq_windows_386.exe	(Windows 版本 YAML 合并，x86 平台)
+	└─tools	(文件合并基础程序，集成到服务端部署包中)
+		jq-linux-amd64		(Linux 版本 JSON 合并，X64 平台)
+		jq-linux-arm64		(Linux 版本 JSON 合并，ARM64 平台)
+		jq-windows-i386.exe	(Windows 版本 JSON 合并，X86 平台)
+		jq					(引用 jq-linux-amd64)
+		yq_linux_amd64		(Linux 版本 YAML 合并，X64 平台)
+		yq_linux_arm64		(Linux 版本 YAML 合并，ARM64 平台)
+		yq_windows_386.exe	(Windows 版本 YAML 合并，X86 平台)
+		yq					(引用 yq_linux_amd64)
 ```
 
-## 文件修改教程
+
+## 各脚本用途
+
+### 一键合并脚本
+集成在服务端部署包 v1.4 或更新版本中，可以一次性完成所有选装组件的配置文件合并，且可以通过 `auto_merge_list.txt` 像资源包/数据包那样自定义覆盖顺序。
+
+### 半自动合并脚本
+集成在选装组件的合并文件夹 (以 `_merge` 结尾) 中，当用户使用旧版服务端部署包 (v1.3.x 或更旧) 时可以使用此脚本完成操作。
+
+### 服务端启动脚本
+同样集成在服务端部署包 v1.4 或更新版本中，可以检查用户是否安装了基础必要组件，且当检测到新的组件或覆盖顺序被更改后会在启动服务端前自动执行一键合并脚本，从而进一步降低配置难度。
+
+
+
+## 内容附加教程
 
 ### .yml 类型
 
@@ -53,7 +75,7 @@ commands:
   name: mytest
   info: test2
 ```
-如果我们需要将 `debug` 的值从 `false` 改成 `true`，并且在 `commands` 中将 `info` 的值从 `test2` 改成 `something`，然后新增加一个值为 `op` 的标签 `permission`，那么只需要根据结构表新建对应的合并文件并写入以下内容：
+如果我们需要将 `debug` 的值从 `false` 改成 `true`，并且在 `commands` 中将 `info` 的值从 `test2` 改成 `something`，然后新增加一个值为 `op` 的标签 `permission`，那么只需要**根据结构表新建对应的合并文件**并写入以下内容：
 ```yml
 debug: true
 commands:

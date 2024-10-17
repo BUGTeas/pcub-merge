@@ -1,12 +1,13 @@
 @echo off
 chcp 65001
-title 盘灵无界自定义配置文件自动合并
-echo.
-echo 盘灵无界自定义配置文件自动合并
 
 :: 确保工作目录为脚本所在目录
 set PCUBLD="%cd%"
 cd /d "%~dp0"
+
+title 盘灵无界配置文件自动合并
+echo.
+echo 正在自动合并 "%~dp0" 中的配置文件...
 
 :: jq程序来自：https://github.com/jqlang/jq
 :: yq程序来自：https://github.com/mikefarah/yq
@@ -21,23 +22,18 @@ echo | set /p d=使用部署包自带的 jq:
 echo | set /p d=使用部署包自带的 yq: 
 %PCUBYQPATH% --version || goto end
 
-set PCUBPATH=plugins\Geyser-Spigot\locales\overrides\zh_cn.json
-if exist %PCUBPATH% (
-	echo | set /p d=正在合并：%PCUBPATH% 
-	%PCUBJQPATH% -s ".[0] * .[1]" "..\%PCUBPATH%" "%PCUBPATH%" -c > .\tmp && move .\tmp ..\%PCUBPATH% > nul || goto end
+:: GeyserMC 语言文件
+set PCUBPATH=plugins\Geyser-Spigot\locales\overrides\zh_
+for %%f in (cn.json tw.json) do if exist %PCUBPATH%%%f (
+	echo | set /p d=%PCUBPATH%%%f: 
+	%PCUBJQPATH% -s ".[0] * .[1]" "..\%PCUBPATH%%%f" "%PCUBPATH%%%f" -c > .\tmp && move .\tmp ..\%PCUBPATH%%%f > nul || goto end
 	echo 完成
 )
 
-set PCUBPATH=plugins\Geyser-Spigot\locales\overrides\zh_tw.json
-if exist %PCUBPATH% (
-	echo | set /p d=正在合并：%PCUBPATH% 
-	%PCUBJQPATH% -s ".[0] * .[1]" "..\%PCUBPATH%" "%PCUBPATH%" -c > .\tmp && move .\tmp ..\%PCUBPATH% > nul || goto end
-	echo 完成
-)
-
+:: GeyserMC 自定义头颅
 set PCUBPATH=plugins\Geyser-Spigot\custom-skulls.yml
 if exist %PCUBPATH% (
-	echo | set /p d=正在合并：%PCUBPATH% 
+	echo | set /p d=%PCUBPATH%: 
 	%PCUBYQPATH% ".player-usernames += load(\"%PCUBPATH%\").player-usernames" ..\%PCUBPATH% > .\tmp1 || goto end
 	%PCUBYQPATH% ".player-uuids += load(\"%PCUBPATH%\").player-uuids" tmp1 > .\tmp || goto end
 	%PCUBYQPATH% ".player-profiles += load(\"%PCUBPATH%\").player-profiles" tmp > .\tmp1 || goto end
@@ -46,17 +42,11 @@ if exist %PCUBPATH% (
 	echo 完成
 )
 
-set PCUBPATH=plugins\CrossplatForms\config.yml
-if exist %PCUBPATH% (
-	echo | set /p d=正在合并：%PCUBPATH% 
-	%PCUBYQPATH% -n "load(\"..\%PCUBPATH%\")*load(\"%PCUBPATH%\")" > .\tmp && move .\tmp ..\%PCUBPATH% > nul || goto end
-	echo 完成
-)
-
-set PCUBPATH=plugins\CrossplatForms\bedrock-forms.yml
-if exist %PCUBPATH% (
-	echo | set /p d=正在合并：%PCUBPATH% 
-	%PCUBYQPATH% -n "load(\"..\%PCUBPATH%\")*load(\"%PCUBPATH%\")" > .\tmp && move .\tmp ..\%PCUBPATH% > nul || goto end
+:: CrossplatForms 菜单
+set PCUBPATH=plugins\CrossplatForms\
+for %%f in (config.yml bedrock-forms.yml) do if exist %PCUBPATH% (
+	echo | set /p d=%PCUBPATH%%%f: 
+	%PCUBYQPATH% -n "load(\"..\%PCUBPATH%%%f\")*load(\"%PCUBPATH%%%f\")" > .\tmp && move .\tmp ..\%PCUBPATH%%%f > nul || goto end
 	echo 完成
 )
 
