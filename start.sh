@@ -6,6 +6,7 @@ function launch(){
 #	========================================
 
 	PCUBErr=$?
+	echo
 	if [ $PCUBErr = 127 ]; then
 		echo "系统找不到 Java ($JavaExec)。请检查其是否在环境变量中，或使用 JavaExec 变量指定 Java 程序路径。(注意区分大小写)"
 	elif [ $PCUBErr != 0 ]; then
@@ -20,7 +21,7 @@ cd "$(cd "$(dirname "$0")";pwd)"
 
 if [ ! -f "plugins/Geyser-Spigot/custom_mappings/pcub.json" ]; then
 	echo -e "\n检测到您未安装梦回盘灵 Java - 基岩双端互通套件，无法启动服务器！"
-	exit
+	exit 1
 fi
 
 # 遍历所有文件夹，生成或追加列表
