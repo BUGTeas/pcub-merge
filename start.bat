@@ -18,13 +18,15 @@
 :begin
 	chcp 65001
 	if "%1" equ "" title 盘灵古域互通（梦回盘灵）专用服务端
-	set PCUBLDA="%cd%"
-	cd /d "%~dp0"
+	set PCUBLD="%cd%"
+	if "%1" neq "cd" if "%2" neq "cd" if "%3" neq "cd" set PCUBLD=
+	if "%PCUBLD%" neq "" cd /d "%~dp0"
 
 	:: 文件环境检测
 	if "%1" equ "nocheck" ( rem 0
 	) else if "%1" equ "noenvcheck" ( rem 0
 	) else if "%2" equ "noenvcheck" ( rem 0
+	) else if "%3" equ "noenvcheck" ( rem 0
 	) else if not exist "world\data\Temple.dat" (
 		set PCUBEnvErr=未导入盘灵古域地图
 		goto envCheckErr
@@ -41,6 +43,7 @@
 	if "%1" equ "nocheck" ( rem 0
 	) else if "%1" equ "nomergecheck" ( rem 0
 	) else if "%2" equ "nomergecheck" ( rem 0
+	) else if "%3" equ "nomergecheck" ( rem 0
 	) else (
 		set PCUBErr=1
 		echo.
@@ -62,5 +65,5 @@
 :mergeErr
 	echo 若想跳过自动合并检测直接启动服务端，可以使用“nomergecheck”参数。 
 :end
-	cd /d %PCUBLDA%
+	if "%PCUBLD%" neq "" cd /d %PCUBLD%
 	if "%1" equ "" pause

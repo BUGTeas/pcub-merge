@@ -23,12 +23,13 @@ function envCheckErr {
 	exit 1
 }
 
-cd "$(cd "$(dirname "$0")";pwd)"
+if [ "$1" = "cd" ]; then cd "$(cd "$(dirname "$0")";pwd)"
 
 # 文件环境检测
 if [ "$1" = "nocheck" ] ||
    [ "$1" = "noenvcheck" ] ||
-   [ "$2" = "noenvcheck" ]; then :
+   [ "$2" = "noenvcheck" ] ||
+   [ "$3" = "noenvcheck" ]; then :
 elif [ ! -f "world/data/Temple.dat" ]; then
 	envCheckErr "未导入盘灵古域地图"
 elif [ ! -e world/datapacks/panling* ]; then
@@ -40,7 +41,8 @@ fi
 # 遍历所有文件夹，生成或追加列表
 if [ "$1" = "nocheck" ] ||
    [ "$1" = "nomergecheck" ] ||
-   [ "$2" = "nomergecheck" ]; then :
+   [ "$2" = "nomergecheck" ] ||
+   [ "$3" = "nomergecheck" ]; then :
 else
 	echo -e "\n正在检测合并项..."
 	bash auto_merge_all.sh check || {

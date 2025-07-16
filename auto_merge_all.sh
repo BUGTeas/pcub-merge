@@ -77,7 +77,7 @@ function PCUBErr(){
 }
 
 if [ "$1" != "check" ]; then
-	cd "$(cd "$(dirname "$0")";pwd)"
+	[ "$1" = "cd" ] && cd "$(cd "$(dirname "$0")";pwd)"
 	echo
 	PCUBLoadExec
 fi

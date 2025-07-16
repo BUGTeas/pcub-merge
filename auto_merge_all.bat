@@ -71,8 +71,10 @@ if %PCUBErr% equ 1 goto :eof
 	goto end
 :begin
 	chcp 65001
-	set PCUBLD="%cd%"
-	cd /d "%~dp0"
+	if "%1" equ "cd" (
+		set PCUBLD="%cd%"
+		cd /d "%~dp0"
+	)
 
 	title 配置文件一键自动合并
 	echo.
@@ -153,5 +155,5 @@ if %PCUBErr% equ 1 goto :eof
 	echo 程序执行出错。 
 	if "%1" equ "check" goto :eof
 :end
-	cd /d %PCUBLD%
+	if "%1" equ "cd" cd /d %PCUBLD%
 	if "%1" equ "" pause
