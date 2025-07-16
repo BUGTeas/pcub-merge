@@ -28,8 +28,9 @@
 	)
 
 	:: 遍历所有文件夹，生成或追加列表
-	set PCUBErr=1
+	set PCUBErr=0
 	if "%1" neq "nocheck" (
+		set PCUBErr=1
 		echo.
 		echo 正在检测合并项...（可使用“nocheck”参数跳过）
 		call auto_merge_all.bat check
