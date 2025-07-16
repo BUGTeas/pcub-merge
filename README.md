@@ -11,7 +11,7 @@
 (`.bat` 后缀为 Windows 专用脚本，`.sh` 后缀为 Linux/OSX Bash 通用脚本)
 ```
 PanGuContinentUnbounded-server (服务端根目录，名称不限)
-	│  auto_merge_all.bat	(一键合并脚本，包含在服务端部署包中)
+	│  auto_merge_all.bat	(一键合并脚本，包含在梦盘互通套件中)
 	│  auto_merge_all.sh	(同上)
 	│  start.bat	(服务端启动脚本，包含在服务端部署包中)
 	│  start.sh		(同上)
