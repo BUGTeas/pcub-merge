@@ -30,7 +30,7 @@ PanGuContinentUnbounded-server (服务端根目录，名称不限)
 	│                      zh_cn.json	(中文简体)
 	│                      zh_tw.json	(中文台繁)
 	│
-	└─tools	(文件合并基础程序，包含在服务端部署包中)
+	└─tools	(文件合并基础程序，包含在梦盘互通套件中)
 		jq-linux-amd64		(Linux 版本 JSON 合并，X64 平台)
 		jq-linux-arm64		(Linux 版本 JSON 合并，ARM64 平台)
 		jq-windows-i386.exe	(Windows 版本 JSON 合并，X86 平台)
