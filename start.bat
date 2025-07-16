@@ -17,7 +17,7 @@
 	goto end
 :begin
 	chcp 65001
-	if "%1" equ "" title 盘灵古域互通（梦回盘灵）专用服务端
+	if "%1" equ "" title 盘灵古域（梦回盘灵）专用互通服务端
 	set PCUBLD="%cd%"
 	if "%1" neq "cd" if "%2" neq "cd" if "%3" neq "cd" set PCUBLD=
 	if "%PCUBLD%" neq "" cd /d "%~dp0"
