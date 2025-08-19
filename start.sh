@@ -23,7 +23,7 @@ function envCheckErr {
 	exit 1
 }
 
-if [ "$1" = "cd" ]; then cd "$(cd "$(dirname "$0")";pwd)"
+[ "$1" = "cd" ] && cd "$(cd "$(dirname "$0")";pwd)"
 
 # 文件环境检测
 if [ "$1" = "nocheck" ] ||
